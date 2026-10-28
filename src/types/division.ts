@@ -18,7 +18,8 @@ export interface ItemRecord {
   id: string;
   name: string;
   slotType: GearSlotType;
-  subType?: string;
+  subType?: string;                     // Categoria da arma: Rifle, Escopeta, SMG, MMR, etc.
+  categoryDescription?: string;         // Descrição da categoria e comportamento balístico da planilha
   brandOrSet?: string;
   isExotic: boolean;
   isNamed: boolean;
@@ -37,6 +38,8 @@ export interface BuildSlotConfig {
   slotType: GearSlotType;
   itemId: string | null;
   itemName: string;
+  subType?: string;                     // Categoria da arma/item
+  categoryDescription?: string;         // Descrição da categoria
   brandOrSet?: string;
   isExotic: boolean;
   isNamed: boolean;

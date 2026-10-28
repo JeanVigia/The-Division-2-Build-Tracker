@@ -1,6 +1,7 @@
 import React from 'react';
-import { CheckCircle2, Circle, MapPin, Sparkles, Lock } from 'lucide-react';
+import { CheckCircle2, Circle, MapPin, Sparkles, Lock, Target } from 'lucide-react';
 import { BuildSlotConfig, GearSlotType, SLOT_METADATA } from '../../types/division';
+import { DIVISION_ITEMS } from '../../data/divisionData';
 
 interface TrackerCardProps {
   slotKey: GearSlotType;
@@ -89,7 +90,22 @@ export const TrackerCard: React.FC<TrackerCardProps> = ({
             )}
           </div>
 
-          {slot?.brandOrSet && (
+          {/* Weapon Category & Description from Spreadsheet */}
+          {meta.section === 'weapons' && hasItem && (slot?.subType || DIVISION_ITEMS.find((it) => it.id === slot?.itemId || it.name === slot?.itemName)?.subType) && (
+            <div className="p-2 bg-black/40 border border-orange-500/30 rounded-xs space-y-0.5">
+              <div className="text-xs font-mono-tech text-orange-400 font-bold flex items-center gap-1.5 uppercase">
+                <Target className="w-3.5 h-3.5 text-orange-400 flex-shrink-0" />
+                <span>Categoria: {slot.subType || DIVISION_ITEMS.find((it) => it.id === slot?.itemId || it.name === slot?.itemName)?.subType}</span>
+              </div>
+              {(slot.categoryDescription || DIVISION_ITEMS.find((it) => it.id === slot?.itemId || it.name === slot?.itemName)?.categoryDescription) && (
+                <p className="text-[11px] font-mono-tech text-zinc-300 leading-snug">
+                  {slot.categoryDescription || DIVISION_ITEMS.find((it) => it.id === slot?.itemId || it.name === slot?.itemName)?.categoryDescription}
+                </p>
+              )}
+            </div>
+          )}
+
+          {meta.section !== 'weapons' && slot?.brandOrSet && (
             <div className="text-xs font-mono-tech text-zinc-300 font-medium">
               {slot.brandOrSet}
             </div>

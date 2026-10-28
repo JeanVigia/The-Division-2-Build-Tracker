@@ -18,6 +18,7 @@ import {
   Search,
   Lock,
   Sliders,
+  Target,
 } from 'lucide-react';
 
 interface SlotCardProps {
@@ -78,6 +79,8 @@ export const SlotCard: React.FC<SlotCardProps> = ({
     onUpdateSlot({
       itemId: item.id,
       itemName: item.name,
+      subType: item.subType || '',
+      categoryDescription: item.categoryDescription || '',
       brandOrSet: item.brandOrSet || item.subType || '',
       isExotic: item.isExotic,
       isNamed: item.isNamed,
@@ -98,6 +101,8 @@ export const SlotCard: React.FC<SlotCardProps> = ({
     onUpdateSlot({
       itemId: null,
       itemName: '',
+      subType: '',
+      categoryDescription: '',
       brandOrSet: '',
       isExotic: false,
       isNamed: false,
@@ -261,8 +266,23 @@ export const SlotCard: React.FC<SlotCardProps> = ({
           )}
         </div>
 
+        {/* Weapon Category & Description from Spreadsheet (Arsenal Ofensivo) */}
+        {isWeapon && slotConfig.itemName && (slotConfig.subType || matchedItem?.subType) && (
+          <div className="p-2.5 bg-[#0f1520] border border-orange-500/40 rounded-xs space-y-1 shadow-inner">
+            <div className="flex items-center gap-1.5 text-xs font-mono-tech text-orange-400 font-bold uppercase tracking-wider">
+              <Target className="w-3.5 h-3.5 text-orange-400 flex-shrink-0" />
+              <span>Categoria: {slotConfig.subType || matchedItem?.subType}</span>
+            </div>
+            {(slotConfig.categoryDescription || matchedItem?.categoryDescription) && (
+              <p className="text-xs font-mono-tech text-zinc-300 leading-snug">
+                {slotConfig.categoryDescription || matchedItem?.categoryDescription}
+              </p>
+            )}
+          </div>
+        )}
+
         {/* Brand / Set badge */}
-        {slotConfig.brandOrSet && (
+        {!isWeapon && slotConfig.brandOrSet && (
           <div className="text-xs font-mono-tech text-zinc-300 flex items-center gap-2 bg-black/30 px-2.5 py-1 rounded-xs border border-white/5">
             <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: accentColor }}></span>
             <span className="font-semibold text-white">{slotConfig.brandOrSet}</span>
