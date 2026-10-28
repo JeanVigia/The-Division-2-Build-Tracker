@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   GearSlotType,
   ItemRecord,
@@ -253,10 +254,16 @@ export const ItemSelectorModal: React.FC<ItemSelectorModalProps> = ({
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
+  return createPortal(
+    <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+    >
       <div
-        className="relative w-full max-w-5xl bg-[#0f141d] border border-orange-500/60 shadow-[0_0_40px_rgba(249,115,22,0.22)] rounded-sm flex flex-col max-h-[92vh] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-5xl bg-[#0f141d] border border-orange-500/60 shadow-[0_0_50px_rgba(249,115,22,0.35)] rounded-sm flex flex-col max-h-[92vh] overflow-hidden"
         style={{ borderTop: `4px solid ${accentColor}` }}
       >
         {/* Top Tactical Banner */}
@@ -606,6 +613,7 @@ export const ItemSelectorModal: React.FC<ItemSelectorModalProps> = ({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
