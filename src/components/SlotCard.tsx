@@ -9,16 +9,16 @@ import {
   GEAR_ALLOWED_SECONDARIES,
 } from '../types/division';
 import { DIVISION_ITEMS } from '../data/divisionData';
+import { ItemSelectorModal } from './builder/ItemSelectorModal';
 import {
   Sparkles,
   MapPin,
-  ChevronDown,
   Info,
   RotateCcw,
-  Search,
   Lock,
   Sliders,
   Target,
+  Layers,
 } from 'lucide-react';
 
 interface SlotCardProps {
@@ -36,19 +36,9 @@ export const SlotCard: React.FC<SlotCardProps> = ({
   onUpdateSlot,
   hasExoticConflict,
 }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const metadata = SLOT_METADATA[slotType];
-
-  // Eligible items for this slot
-  const eligibleItems = DIVISION_ITEMS.filter((item) => item.slotType === slotType);
-
-  const filteredItems = eligibleItems.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (item.subType && item.subType.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (item.brandOrSet && item.brandOrSet.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
 
   // Determine allowed secondary attributes based on item slot class
   const isWeapon = metadata.section === 'weapons';
@@ -93,8 +83,7 @@ export const SlotCard: React.FC<SlotCardProps> = ({
       dropSource: item.dropSource,
       dropNotes: item.dropNotes || '',
     });
-    setIsDropdownOpen(false);
-    setSearchTerm('');
+    setIsModalOpen(false);
   };
 
   const handleClearSlot = () => {
@@ -191,79 +180,23 @@ export const SlotCard: React.FC<SlotCardProps> = ({
 
       {/* Main Selector & Item Body */}
       <div className="p-3.5 space-y-3.5 flex-1">
-        {/* Item Selector Dropdown */}
+        {/* Item Selector Trigger */}
         <div className="relative">
           <button
             type="button"
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full text-left px-3 py-2.5 bg-black/60 border border-white/20 hover:border-white/40 text-sm font-rajdhani tracking-wider flex items-center justify-between gap-2 transition-colors rounded-xs"
+            onClick={() => setIsModalOpen(true)}
+            className="w-full text-left px-3 py-2.5 bg-black/70 border border-white/20 hover:border-orange-500/80 text-sm font-rajdhani tracking-wider flex items-center justify-between gap-2 transition-all rounded-xs hover:bg-[#151c28] group cursor-pointer shadow-sm"
           >
-            <span className={`truncate font-bold ${slotConfig.itemName ? 'text-white text-base' : 'text-zinc-400'}`}>
-              {slotConfig.itemName || `[ SELECIONAR ${metadata.label.toUpperCase()} ]`}
-            </span>
-            <ChevronDown className="w-4 h-4 text-zinc-300 flex-shrink-0" />
-          </button>
-
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-[#0f141d] border border-white/30 shadow-2xl z-50 p-2.5 rounded-sm max-h-72 overflow-y-auto">
-              <div className="flex items-center gap-2 px-2.5 py-1.5 bg-black/70 border border-white/20 mb-2 rounded-xs">
-                <Search className="w-4 h-4 text-zinc-400" />
-                <input
-                  type="text"
-                  placeholder="Pesquisar item da planilha..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  autoFocus
-                  className="bg-transparent border-none text-xs sm:text-sm text-white outline-none w-full font-mono-tech"
-                />
-              </div>
-
-              <div className="space-y-1">
-                {filteredItems.length === 0 ? (
-                  <div className="text-center py-4 text-zinc-400 text-xs font-mono-tech">
-                    Nenhum item encontrado no catálogo.
-                  </div>
-                ) : (
-                  filteredItems.map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => handleSelectItem(item)}
-                      className={`px-3 py-2 cursor-pointer text-xs sm:text-sm flex items-center justify-between gap-2 hover:bg-white/10 transition-colors border-b border-white/5 rounded-xs ${
-                        slotConfig.itemId === item.id ? 'bg-white/15 font-bold' : ''
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className={item.isExotic ? 'text-orange-400 font-bold' : 'text-zinc-100 font-semibold'}>
-                            {item.name}
-                          </span>
-                          {item.isExotic && (
-                            <span className="text-[10px] bg-orange-600 text-white px-1.5 py-0.2 rounded-xs font-bold">
-                              EXO
-                            </span>
-                          )}
-                          {item.isNamed && (
-                            <span className="text-[10px] bg-amber-500/30 text-amber-300 border border-amber-500/50 px-1.5 py-0.2 rounded-xs font-bold">
-                              NOM
-                            </span>
-                          )}
-                        </div>
-                        {item.brandOrSet && (
-                          <div className="text-xs text-zinc-400 font-mono-tech pt-0.5">
-                            {item.brandOrSet}
-                          </div>
-                        )}
-                      </div>
-                      <span className={`text-xs font-mono-tech px-2 py-0.5 border rounded-xs font-bold ${getCoreBadgeStyle(item.coreType)}`}>
-                        {item.coreType === 'red' ? 'DPS' : item.coreType === 'blue' ? 'ARMOR' : 'SKILL'}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
+            <div className="flex items-center gap-2 truncate">
+              <Layers className="w-4 h-4 text-orange-400 flex-shrink-0 group-hover:scale-110 transition-transform" />
+              <span className={`truncate font-bold ${slotConfig.itemName ? 'text-white text-base' : 'text-zinc-400'}`}>
+                {slotConfig.itemName || `[ SELECIONAR ${metadata.label.toUpperCase()} ]`}
+              </span>
             </div>
-          )}
+            <span className="text-[11px] font-mono-tech px-2 py-0.5 bg-white/10 text-zinc-300 rounded-xs border border-white/15 flex-shrink-0 group-hover:border-orange-500/60 group-hover:text-orange-300 transition-colors">
+              Catálogo ▾
+            </span>
+          </button>
         </div>
 
         {/* Weapon Category & Description from Spreadsheet (Arsenal Ofensivo) */}
@@ -452,6 +385,18 @@ export const SlotCard: React.FC<SlotCardProps> = ({
           <span>Aviso: O jogo permite apenas 1 arma exótica e 1 equipamento exótico equipado.</span>
         </div>
       )}
+
+      {/* Spacious Unclipped Tactical Item Selector Modal */}
+      <ItemSelectorModal
+        isOpen={isModalOpen}
+        slotType={slotType}
+        currentSelectedId={slotConfig.itemId}
+        currentSelectedName={slotConfig.itemName}
+        accentColor={accentColor}
+        onSelect={handleSelectItem}
+        onClose={() => setIsModalOpen(false)}
+        onClear={handleClearSlot}
+      />
     </div>
   );
 };
