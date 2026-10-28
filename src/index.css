@@ -7,22 +7,71 @@
     font-family: 'Chakra Petch', sans-serif;
     overflow-x: hidden;
   }
+}
 
-  /* Custom tactical scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0f141c;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 2px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #f97316;
-  }
+/* Universal custom tactical scrollbar for all elements */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0b0e14;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0b0e14;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #252f3f;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #f97316;
+  box-shadow: 0 0 8px rgba(249, 115, 22, 0.6);
+}
+
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Dedicated Tactical Tab Scrollbar (HUD Division 2 Style) */
+.tactical-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #ea580c #090d13;
+}
+
+.tactical-scrollbar::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.tactical-scrollbar::-webkit-scrollbar-track {
+  background: #090d13;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tactical-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #ea580c, #f97316);
+  border-radius: 2px;
+  box-shadow: 0 0 6px rgba(234, 88, 12, 0.5);
+}
+
+.tactical-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #fb923c;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.8);
+}
+
+.tactical-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .font-rajdhani {
