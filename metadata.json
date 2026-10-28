@@ -1,0 +1,6 @@
+{
+  "name": "Division 2 - SHD Protocol Build & Tracker",
+  "description": "Planejador de builds e rastreador de itens tático para The Division 2 com estética ISAC/SHD Tech e base de dados da planilha oficial da comunidade.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
